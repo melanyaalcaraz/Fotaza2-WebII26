@@ -1,0 +1,24 @@
+doctype html
+html
+  head
+    title Iniciar Sesion - Fotaza
+    meta(charset="UTF-8")
+    link(rel="stylesheet",  href="css.css ")
+  body
+    h1 Inicia sesion de tu cuenta en Fotaza!
+
+    form(action="/api/usuarios/registro" method="POST")
+      
+      div
+        label(for="nombre") Nombre de usuario:
+        input(type="text" name="nombre" required)
+
+      div
+        label(for="password") Contraseña:
+        input(type="password" name="password" required)
+        
+
+      div
+        button(type="submit") Iniciar sesion 
+
+    p ¿No esta registrado? <a href="registro.pug">Registrarme </a>

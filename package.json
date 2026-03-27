@@ -1,0 +1,31 @@
+{
+  "name": "fotaza2-webii26",
+  "version": "1.0.0",
+  "description": "Integrador Programacion Web II 2026",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/melanyaalcaraz/Fotaza2-WebII26.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/melanyaalcaraz/Fotaza2-WebII26/issues"
+  },
+  "homepage": "https://github.com/melanyaalcaraz/Fotaza2-WebII26#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "multer": "^2.1.1",
+    "mysql2": "^3.20.0",
+    "pug": "^3.0.4"
+  }
+}

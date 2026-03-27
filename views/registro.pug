@@ -1,0 +1,28 @@
+doctype html
+html
+  head
+    title Registro - Fotaza
+    meta(charset="UTF-8")
+    link(rel="stylesheet",  href="css.css ")
+  body
+    h1 Crea tu cuenta en Fotaza!
+
+    form(action="/api/usuarios/registro" method="POST")
+      
+      div
+        label(for="nombre") Nombre de usuario:
+        input(type="text" name="nombre" required)
+
+      div
+        label(for="email") Email:
+        input(type="email" name="email" required)
+
+      div
+        label(for="password") Contraseña:
+        input(type="password" name="password" required)
+        
+
+      div
+        button(type="submit") Registrarse
+
+    p ¿Ya esta registrado? <a href="login.pug">Inicie sesión</a>
