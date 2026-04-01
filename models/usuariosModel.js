@@ -1,10 +1,5 @@
 const conexion = require('../base_datos/conexion')
 
-// const crearUsuario= (usuarios, callback) => {
-//     const sql= 'INSERT INTO usuarios SET ?'
-//     conexion.query(sql,usuarios,callback);
-// };
-
 const crearUsuario = (data) => {
   return new Promise((resolve, reject) => {
     const sql = 'INSERT INTO usuarios SET ?';
@@ -23,11 +18,11 @@ const obtenerPorEmail = (email) => {
     conexion.query(sql, [email], (err, resultados) => {
       if (err) return reject(err);
       if (resultados.length === 0) return resolve(null);
+
       resolve(resultados[0]);
     });
   });
 };
-
 
 
 module.exports = {

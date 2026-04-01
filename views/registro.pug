@@ -1,9 +1,9 @@
 doctype html
 html
   head
-    title Registro - Fotaza
+    title Registro - Fotaza 
     meta(charset="UTF-8")
-    link(rel="stylesheet",  href="css.css ")
+    link(rel="stylesheet", href="css.css")
   body
     h1 Crea tu cuenta en Fotaza!
 
@@ -21,8 +21,23 @@ html
         label(for="password") Contraseña:
         input(type="password" name="password" required)
         
-
       div
         button(type="submit") Registrarse
 
-    p ¿Ya esta registrado? <a href="login.pug">Inicie sesión</a>
+    // 🔹 MENSAJES
+    if query.ok == 1
+     p(style="color:green") Usuario registrado correctamente
+
+     script.
+      setTimeout(() => {
+      window.location.href = "/login";
+      }, 3000);
+
+    if query.error == 1
+      p(style="color:red") El email ya está registrado
+
+    if query.error == 2
+      p(style="color:red") Todos los campos son obligatorios
+
+    p ¿Ya estás registrado? 
+      a(href="/login") Iniciá sesión

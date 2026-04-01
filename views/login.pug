@@ -1,17 +1,17 @@
 doctype html
 html
   head
-    title Iniciar Sesion - Fotaza
+    title Iniciar Sesion - Fotaza 
     meta(charset="UTF-8")
     link(rel="stylesheet",  href="css.css ")
   body
     h1 Inicia sesion de tu cuenta en Fotaza!
 
-    form(action="/api/usuarios/registro" method="POST")
+    form(action="/api/usuarios/login" method="POST")
       
       div
-        label(for="nombre") Nombre de usuario:
-        input(type="text" name="nombre" required)
+        label(for="email") Nombre de usuario:
+        input(type="email" name="email" required)
 
       div
         label(for="password") Contraseña:
@@ -21,4 +21,16 @@ html
       div
         button(type="submit") Iniciar sesion 
 
-    p ¿No esta registrado? <a href="registro.pug">Registrarme </a>
+    if query.ok == 1
+     p(style="color:green") Sesión iniciada correctamente
+
+     script.
+      setTimeout(() => {
+      window.location.href = "/login";
+      }, 3000);
+
+    if query.error == 1
+      p(style="color:red") Credenciales inválidas
+
+    p ¿No esta registrado?  
+      a(href="/registro") Registrate!

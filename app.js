@@ -27,8 +27,12 @@ app.get('/', (req, res) => {
 });
 
 app.get("/registro", (req, res) => {
-  res.render("registro");
+  res.render("registro", { query: req.query });
 });
+
+app.get("/login", (req, res) => {
+  res.render("login", { query: req.query });
+}); 
 
 app.use(express.static('public'));
 
