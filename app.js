@@ -21,6 +21,12 @@ const puerto = 3000;
 const rutasUsuarios = require('./routes/usuarios');
 app.use('/api/usuarios', rutasUsuarios);
 
+const rutasFotos = require("./routes/fotos");
+app.use("/api/fotos", rutasFotos);
+
+
+
+
 // ruta principal (vista)
 app.get('/', (req, res) => {
   res.render('index');
@@ -34,9 +40,12 @@ app.get("/login", (req, res) => {
   res.render("login", { query: req.query });
 }); 
 
+
+
 app.use(express.static('public'));
 
 app.use(express.urlencoded({ extended: true }));
+
 
 // iniciar servidor
 app.listen(puerto, () => {

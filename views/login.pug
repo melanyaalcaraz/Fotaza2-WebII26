@@ -1,36 +1,74 @@
+
 doctype html
 html
   head
-    title Iniciar Sesion - Fotaza 
+    title Iniciar Sesion - Fotaza Copia
     meta(charset="UTF-8")
-    link(rel="stylesheet",  href="css.css ")
+    link(rel="stylesheet",  href="/css.css ")
   body
     h1 Inicia sesion de tu cuenta en Fotaza!
 
-    form(action="/api/usuarios/login" method="POST")
+    form(id="loginForm")
       
       div
         label(for="email") Nombre de usuario:
-        input(type="email" name="email" required)
+        input(type="email" name="email" id="email" required)
 
       div
         label(for="password") Contraseña:
-        input(type="password" name="password" required)
+        input(type="password" name="password" id="password" required)
         
 
       div
         button(type="submit") Iniciar sesion 
 
-    if query.ok == 1
-     p(style="color:green") Sesión iniciada correctamente
+   
 
-     script.
-      setTimeout(() => {
-      window.location.href = "/login";
-      }, 3000);
+      p ¿No esta registrado?  
+          a(href="/registro") Registrate!
+  div.contenedor-mensaje 
+    p#mensaje.mensaje
 
-    if query.error == 1
-      p(style="color:red") Credenciales inválidas
+ 
 
-    p ¿No esta registrado?  
-      a(href="/registro") Registrate!
+    
+script.
+  const loginForm = document.getElementById('loginForm');
+  const mensaje = document.getElementById('mensaje');
+
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    try {
+      const res = await fetch('/api/usuarios/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+      
+      if (res.ok) {
+        localStorage.setItem('token', data.token);
+        mensaje.className = "mensaje ok";
+        mensaje.textContent = '✅ Login exitoso. Redirigiendo...';
+        localStorage.setItem("usuario", JSON.stringify(data.usuario));
+        window.location.href = "/";
+  
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 1500);
+
+      } else {
+        mensaje.className = "mensaje error";
+        mensaje.textContent = data.error || 'Error desconocido';
+      }
+
+    } catch (err) {
+      mensaje.className = "mensaje error";
+      mensaje.textContent = 'Error de red o servidor.';
+    }
+  });

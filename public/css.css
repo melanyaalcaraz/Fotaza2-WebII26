@@ -1,38 +1,280 @@
 body {
-    font-family: 'Playfair Display', serif;
-    background:#02182B;
-    text-align: center;
-    font-size: large;
-    padding: 50px;
-    color: white;
-  }
-  
-  form {
-    background:#465362;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-    max-width: 330px;
-    margin: auto;
-  }
-  
-  input, button {
-    width: 90%;
-    padding: 12px;
-    margin: 10px 0;
-    border: none;
-    border-radius: 8px;
-  }
-  
-  button {
-    background: #011936;
-    color: white;
-    font-weight: bold;
-  }
+  font-family: 'Playfair Display', serif;
+  background: #02182B;
+  text-align: center;
+  font-size: large;
+  color: white;
+  margin: 0px;
+  line-height: 1.6;
+}
 
-   a {
-    color: inherit;       
-    text-decoration: none; 
-  }
+form {
+  background: #465362;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  max-width: 330px;
+  margin: auto;
+}
+
+input,
+button {
+  width: 90%;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 8px;
+}
+
+button {
+  background: #011936;
+  color: white;
+  font-weight: bold;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.contenedor-mensaje {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.mensaje {
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  font-weight: bold;
+  width: fit-content;
+  display: inline-block;
+}
+
+.ok {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.error {
+  background-color: #e57373;
+  color: white;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  box-sizing: border-box;
+  background-color: #02182B;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav-left:hover {
+  color: whitesmoke;
+  text-decoration: underline;
+}
+
+.nav-right:hover {
+  color: whitesmoke;
+  text-decoration: underline;
+}
+
+.nav-center input {
+  background-color: transparent;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid gray;
+  width: 350px;
+  height: 25px;
+  color: white;
+
+}
+
+.nav-center {
+  display: flex;
+  align-items: center;
+
+}
+
+.navbar a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+
+}
+
+.navbar svg {
+  transition: 0.2s;
+}
+
+.navbar a:hover svg {
+  transform: scale(1.1);
+  stroke: #ccc;
+}
+
+#busqueda {
+  background-color: #0A2540;
+  border-radius: 20px;
+  padding: 5px 15px;
+}
+
+
+.icono-busqueda {
+  width: 14px;
+  height: 14px;
+  border: 2px solid white;
+  border-radius: 50%;
+  position: relative;
+  margin-left: 8px;
+}
+
+.icono-busqueda::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 2px;
+  background: white;
+  bottom: -4px;
+  right: -5px;
+  transform: rotate(45deg);
+}
+
+.nav-center input:hover {
+  border: 1px solid white;
+}
+
+
+.feed {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  padding-top: 55px;
+
+}
+
+#subir {
+  width: 100%;
+  border-radius: 10px;
+  border: none;
+  padding: 10px;
+  resize: none;
+}
+
+.publicaciones {
+  background-color: #0A2540;
+  flex: 4;
+  padding: 20px;
+
+}
+
+.publicar {
+  display: flex;
+  padding-left: 60px;
+  border-radius: 12px;
+  flex-direction: column;
+  gap: 10px;
+}
+.publicar input[type="file"] {
   
-  /* --------------------------index--------------------
+  border: 1px solid #465362;
+  border-radius: 10px;
+  padding: 10px;
+  color: white;
+  cursor: pointer;
+}
+
+#subir {
+  width: 90%;
+  min-height: 40px;
+  background: whitesmoke;
+  border: none;
+  color: black;
+  outline: none;
+  resize: none;
+  font-size: 14px;
+}
+
+#subir:focus {
+  border-bottom: 2px solid white;
+}
+
+
+#btnPublicar {
+  background: #1B3A5F;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#btnPublicar:hover {
+  background: #2c5d8f;
+}
+
+.amigos {
+  flex: 1;
+  padding: 20px;
+  padding: 15px;
+  border-radius: 10px;
+  height: fit-content;
+
+}
+
+.card {
+  background: #02182B;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  text-align: left;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: gray;
+  margin-right: 10px;
+}
+
+.username {
+  font-weight: bold;
+}
+
+.card-footer {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.carda {
+  background: #0A2540;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  text-align: left;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
