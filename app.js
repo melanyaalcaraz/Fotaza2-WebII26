@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// configurar Pug
+
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 

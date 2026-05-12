@@ -278,3 +278,30 @@ nav {
   text-align: left;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
+
+#mensajePublicacion {
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: bold;
+  display: none;
+  width: fit-content;
+}
+
+.mensaje-error {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+.mensaje-ok {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.foto-feed {
+  width: 100%;
+  max-height: 500px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-top: 10px;
+}

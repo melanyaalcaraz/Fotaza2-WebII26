@@ -25,7 +25,7 @@ html
             circle(cx="12" cy="8" r="4", stroke="white", fill="none", stroke-width="2")
             path(d="M4 20c0-4 16-4 16 0", stroke="white", fill="none", stroke-width="2")
 
-    div.feed#feed
+    div.feed
       div.publicaciones 
         br
         h2 Bienvenido a Fotaza 
@@ -49,28 +49,8 @@ html
         
         br
 
-        div.card
-          div.card-header
-            div.avatar
-            span.username usuario1
-
-          div.card-body
-            p Hola, esta es una publicación de prueba
-
-          div.card-footer
-            span ❤️ Me gusta
         
-        
-          
-      
-      
-      div.amigos
-        h2 Amigos
-        div.carda
-          div.card-header
-            div.avatar
-            span.username Thomaco
-      br
+        div#feed
     
     
     script.
@@ -90,13 +70,24 @@ html
       const btn = document.getElementById("btnPublicar");
       const textarea = document.getElementById("subir");
       const feed = document.getElementById("feed");
-
+      const mensaje = document.getElementById("mensajePublicacion");
       
 
       btn.addEventListener("click", async () => {
 
         const archivo = document.getElementById("archivoImagen").files[0];
+        if (!archivo) {
 
+          mensaje.style.display = "block";
+          mensaje.className = "mensaje-error";
+          mensaje.textContent = "Tenés que subir una imagen";
+
+          setTimeout(() => {
+            mensaje.style.display = "none";
+            mensaje.textContent = "";
+          }, 3000);
+          return;
+        }
         const formData = new FormData();
 
         formData.append("imagen", archivo);
@@ -119,9 +110,79 @@ html
           const data = await res.json();
 
           console.log(data);
+          
+          mensaje.style.display = "block";
+          mensaje.className = "mensaje-ok";
+          mensaje.textContent = "Publicación subida correctamente";
+          textarea.value = "";
+          document.getElementById("archivoImagen").value = "";
+
+          setTimeout(() => {
+            mensaje.style.display = "none";
+            mensaje.textContent = "";
+          }, 3000);
+          cargarFotos();
+        
 
           } catch (error) {
 
             console.error(error);
           }
+         
       });
+
+
+      async function cargarFotos() {
+
+        try {
+
+          const res = await fetch("/api/fotos", {
+            headers: {
+              Authorization: "Bearer " + token
+            }
+          });
+
+          const fotos = await res.json();
+
+          feed.innerHTML = "";
+
+          fotos.forEach(foto => {
+
+            feed.innerHTML += `
+
+              <div class="card">
+
+                <div class="card-header">
+
+                  <div class="avatar"></div>
+
+                  <span class="username">
+                    ${foto.username}
+                  </span>
+
+                </div>
+
+                <div class="card-body">
+
+                  
+                  <p>
+                    ${foto.descripcion}
+                  </p>
+                  <img
+                    src="/uploads/${foto.url_imagen}"
+                    class="foto-feed"
+                  >
+
+                </div>
+
+              </div>
+            `;
+          });
+
+        } catch (error) {
+
+          console.error(error);
+        }
+      }
+
+      cargarFotos();

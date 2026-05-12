@@ -6,7 +6,7 @@ const fotosController = require('../controllers/fotosController');
 
 router.post('/', verificarToken, upload.single('imagen'), fotosController.subirFoto);
 
-// router.get('/', verificarToken, fotosController.obtenerFotosUsuario);
+router.get('/', verificarToken, fotosController.obtenerFotosUsuario);
 
 
 // router.get('/compartidas', verificarToken, fotosController.obtenerFotosCompartidas);

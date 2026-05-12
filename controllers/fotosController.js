@@ -40,6 +40,20 @@ function subirFoto(req, res) {
 }
 
 
+const obtenerFotosUsuario = (req, res) => {
+ 
+  const id_usuario = req.usuario.id;
+  fotosModel.obtenerPorUsuario(id_usuario, (err, fotos) => {
+    if (err) {
+      console.error('❌ Error al obtener fotos:', err);
+      return res.status(500).json({ error: 'Error al obtener fotos' });
+    }
+
+    res.json(fotos);
+  });
+};
+
 module.exports = {
-  subirFoto
+  subirFoto,
+  obtenerFotosUsuario
 };
