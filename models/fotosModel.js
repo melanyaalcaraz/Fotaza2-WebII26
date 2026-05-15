@@ -6,7 +6,6 @@ function guardarFoto( id_usuario, url_imagen, descripcion, callback) {
     conexion.query(sql, [ id_usuario, url_imagen, descripcion], callback);
 }
 
-
 function obtenerPorUsuario(id_usuario, callback) {
   const sql = `
         SELECT fotos.*, usuarios.username

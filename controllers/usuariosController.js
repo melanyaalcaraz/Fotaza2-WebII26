@@ -88,7 +88,22 @@ const loginUsuario = async (req, res) => {
 };
 
 
+const buscarUsuarios = (req, res) => {
+  const { q } = req.query;
+  
+
+  usuariosModel.buscarUsuarios(q, (err, resultados) => {
+    if (err) {
+      console.error('Error al buscar usuarios:', err);
+      return res.status(500).json({ error: 'Error al buscar usuarios' });
+    }
+
+    res.json(resultados);
+  });
+};
+
 module.exports = {
   registrarUsuario,
-  loginUsuario
+  loginUsuario,
+  buscarUsuarios
 };

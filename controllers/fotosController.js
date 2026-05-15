@@ -39,7 +39,6 @@ function subirFoto(req, res) {
   }
 }
 
-
 const obtenerFotosUsuario = (req, res) => {
  
   const id_usuario = req.usuario.id;

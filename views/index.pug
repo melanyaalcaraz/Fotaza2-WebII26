@@ -12,8 +12,8 @@ html
             path(d="M3 12L12 3l9 9M4 10v10h6v-6h4v6h6V10", stroke="white", fill="none", stroke-width="2")
       div.nav-center
         input(type="text" placeholder="Buscar..." id="busqueda")
-        span.icono-busqueda
-         
+        
+        div#resultadosBusqueda
       div.nav-right
         a(href="/notificaciones") 
           svg(width="24" height="24" viewBox="0 0 24 24")
@@ -46,11 +46,19 @@ html
             )
             
           button#btnPublicar Publicar
-        
+          div#mensajePublicacion
         br
 
-        
         div#feed
+       
+      div.amigos
+
+          h2 Amigos
+
+          div#listaAmigos
+                  
+      
+      
     
     
     script.
@@ -71,8 +79,56 @@ html
       const textarea = document.getElementById("subir");
       const feed = document.getElementById("feed");
       const mensaje = document.getElementById("mensajePublicacion");
-      
+      const busqueda = document.getElementById("busqueda");
 
+      const resultadosBusqueda = document.getElementById("resultadosBusqueda");
+      //buscar usuarios
+      busqueda.addEventListener("input", async () => {
+
+        const texto = busqueda.value;
+
+        if (texto.length < 2) {
+
+          resultadosBusqueda.innerHTML = "";
+          return;
+        }
+
+        try {
+
+          const res = await fetch(
+            `/api/usuarios/buscar?q=${texto}`
+          );
+
+          const usuarios = await res.json();
+
+          resultadosBusqueda.innerHTML = "";
+
+          usuarios.forEach(usuario => {
+
+            resultadosBusqueda.innerHTML += `
+              <div class="usuario-resultado">
+
+                <span>
+                  ${usuario.username}
+                </span>
+
+                <button class="btn-seguir"
+                id="seguir-${usuario.id_usuario}"
+                 onclick="seguirUsuario(${usuario.id_usuario})">
+                  Seguir
+                </button>
+
+              </div>
+            `;
+          });
+
+        } catch (error) {
+
+          console.error(error);
+        }
+      });
+
+      //publicar
       btn.addEventListener("click", async () => {
 
         const archivo = document.getElementById("archivoImagen").files[0];
@@ -174,6 +230,120 @@ html
                   >
 
                 </div>
+                <div class="comentarios">
+
+                <input
+                  type="text"
+                  placeholder="Escribí un comentario..."
+                  id="comentario-${foto.id_foto}"
+                >
+
+                <button
+                  onclick="comentar(${foto.id_foto})"
+                >
+                  Comentar
+                </button>
+
+                <div id="lista-comentarios-${foto.id_foto}">
+                </div>
+
+              </div>
+
+              </div>
+            `;
+          });
+       fotos.forEach(foto => {
+
+         cargarComentarios(foto.id_foto);
+
+      });
+        } catch (error) {
+
+          console.error(error);
+        }
+      }
+
+      async function seguirUsuario(id) {
+
+        try {
+
+          const res = await fetch( "/api/seguidores", {
+
+              method: "POST",
+
+              headers: {
+
+                "Content-Type":
+                  "application/json",
+
+                Authorization:
+                  "Bearer " + token
+              },
+
+              body: JSON.stringify({
+                usuario_seguido: id
+              })
+            }
+          );
+
+          const data = await res.json();
+
+          console.log(data);
+          
+          const boton = document.getElementById( `seguir-${id}`);
+
+            boton.textContent = "Siguiendo";
+            boton.disabled = true;
+            boton.style.opacity = "0.7";
+
+          cargarSeguidos();
+
+        } catch (error) {
+
+          console.error(error);
+        }
+      }
+
+      async function cargarSeguidos() {
+
+        const lista =
+          document.getElementById(
+            "listaAmigos"
+          );
+
+        try {
+
+          const res = await fetch(
+            "/api/seguidores",
+            {
+
+              headers: {
+                Authorization:
+                  "Bearer " + token
+              }
+            }
+          );
+
+          const usuarios =
+            await res.json();
+
+          lista.innerHTML = "";
+
+          usuarios.forEach(usuario => {
+
+            lista.innerHTML += `
+
+              <div class="carda">
+
+                <div class="card-header">
+
+                  <div class="avatar"></div>
+
+                  <span class="username">
+                    ${usuario.username}
+                  </span>
+
+                </div>
 
               </div>
             `;
@@ -185,4 +355,98 @@ html
         }
       }
 
+      async function comentar(id_foto) {
+
+          const input =
+            document.getElementById(
+              `comentario-${id_foto}`
+            );
+
+          const contenido =
+            input.value;
+
+          if (!contenido.trim()) return;
+
+          try {
+
+            const res = await fetch(
+              "/api/comentarios",
+              {
+
+                method: "POST",
+
+                headers: {
+
+                  "Content-Type":
+                    "application/json",
+
+                  Authorization:
+                    "Bearer " + token
+                },
+
+                body: JSON.stringify({
+
+                  id_foto,
+                  contenido
+                })
+              }
+            );
+
+            const data =
+              await res.json();
+
+            console.log(data);
+            cargarComentarios(id_foto);
+            input.value = "";
+
+          } catch (error) {
+
+            console.error(error);
+          }
+        }
+
+      async function cargarComentarios(
+        id_foto
+      ) {
+
+        const div =
+          document.getElementById(
+            `lista-comentarios-${id_foto}`
+          );
+
+        try {
+
+          const res = await fetch(
+            `/api/comentarios/${id_foto}`
+          );
+
+          const comentarios =
+            await res.json();
+
+          div.innerHTML = "";
+
+          comentarios.forEach(c => {
+
+            div.innerHTML += `
+
+              <div class="comentario">
+
+                <strong>
+                  ${c.username}
+                </strong>
+
+                ${c.contenido}
+
+              </div>
+            `;
+          });
+
+        } catch (error) {
+
+          console.error(error);
+        }
+      }
+
+      cargarSeguidos();
       cargarFotos();
+      
