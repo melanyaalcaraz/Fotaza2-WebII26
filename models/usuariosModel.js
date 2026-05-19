@@ -33,81 +33,9 @@ function buscarUsuarios(texto, callback) {
     LIMIT 10
   `;
 
-  conexion.query(
-    sql,
-    [`%${texto}%`],
-    callback
-  );
+  conexion.query( sql, [`%${texto}%`], callback);
 }
 
-
-// function buscarUsuarios(
-//   texto,
-//   usuarioLogueado,
-//   callback
-// ) {
-
-//   const sql = `
-
-//     SELECT
-
-//       u.id_usuario,
-
-//       u.username,
-
-//       CASE
-
-//         WHEN s1.usuario_seguidor
-//         IS NOT NULL
-
-//         AND s2.usuario_seguidor
-//         IS NOT NULL
-
-//         THEN 'amigos'
-
-//         WHEN s1.usuario_seguidor
-//         IS NOT NULL
-
-//         THEN 'siguiendo'
-
-//         ELSE 'seguir'
-
-//       END AS estado
-
-//     FROM usuarios u
-
-//     LEFT JOIN seguidores s1
-
-//       ON u.id_usuario =
-//       s1.usuario_seguido
-
-//       AND s1.usuario_seguidor = ?
-
-//     LEFT JOIN seguidores s2
-
-//       ON u.id_usuario =
-//       s2.usuario_seguidor
-
-//       AND s2.usuario_seguido = ?
-
-//     WHERE u.username LIKE ?
-
-//     LIMIT 10
-//   `;
-
-//   conexion.query(
-
-//     sql,
-
-//     [
-//       usuarioLogueado,
-//       usuarioLogueado,
-//       `%${texto}%`
-//     ],
-
-//     callback
-//   );
-// }
 
 module.exports = {
   crearUsuario,

@@ -28,9 +28,7 @@ app.use("/api/fotos", rutasFotos);
 
 
 // ruta principal (vista)
-app.get('/', (req, res) => {
-  res.render('index');
-});
+app.get('/', (req, res) => {res.render('index');});
 
 app.get("/registro", (req, res) => {
   res.render("registro", { query: req.query });

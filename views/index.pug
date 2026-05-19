@@ -48,8 +48,20 @@ html
           button#btnPublicar Publicar
           div#mensajePublicacion
         br
+        div.filtros-feed
 
+          button(
+            onclick="cargarFeedSeguidos()"
+            name = "btnSeguidos"
+          ) Siguiendo
+
+          button(
+            onclick="cargarMisPosts()"
+            name = "btnMisPosts"
+          ) Mis publicaciones
         div#feed
+        
+       
        
       div.amigos
 
@@ -57,17 +69,25 @@ html
 
           div#listaAmigos
                   
-      
+    div#modalPost.modal-post
+      div.modal-contenido
+
+        span.cerrar-modal(
+          onclick="cerrarPost()"
+        ) ×
+
+        div#contenidoModal
       
     
     
     script.
+      //token
       const token = localStorage.getItem('token');
-
       if (!token) {
         alert('Debes iniciar sesión');
         window.location.href = 'login.html';
       }
+      
       const usuario = JSON.parse(localStorage.getItem("usuario"));
       const saludo = document.getElementById("saludo");
 
@@ -80,6 +100,7 @@ html
       const feed = document.getElementById("feed");
       const mensaje = document.getElementById("mensajePublicacion");
       const busqueda = document.getElementById("busqueda");
+      let fotosGlobal = [];
 
       const resultadosBusqueda = document.getElementById("resultadosBusqueda");
       //buscar usuarios
@@ -178,90 +199,152 @@ html
             mensaje.textContent = "";
           }, 3000);
           cargarFotos();
-        
-
           } catch (error) {
 
             console.error(error);
           }
-         
       });
 
 
-      async function cargarFotos() {
+      function renderizarFotos(fotos) {
 
-        try {
+        fotosGlobal = fotos;
 
-          const res = await fetch("/api/fotos", {
-            headers: {
-              Authorization: "Bearer " + token
-            }
-          });
+        feed.innerHTML = "";
 
-          const fotos = await res.json();
+        fotos.forEach(foto => {
 
-          feed.innerHTML = "";
+          feed.innerHTML += `
+          <div class="card">
 
-          fotos.forEach(foto => {
+                 <div class="card-header">
 
-            feed.innerHTML += `
-
-              <div class="card">
-
-                <div class="card-header">
-
-                  <div class="avatar"></div>
+                   <div class="avatar"></div>
 
                   <span class="username">
                     ${foto.username}
-                  </span>
+                   </span>
+                 </div>
 
-                </div>
-
-                <div class="card-body">
+                 <div class="card-body">
 
                   
-                  <p>
-                    ${foto.descripcion}
-                  </p>
+                   <p>
+                     ${foto.descripcion}
+                   </p>
                   <img
                     src="/uploads/${foto.url_imagen}"
                     class="foto-feed"
+                    onclick="
+                        abrirPost(${foto.id_foto})
+                      "
                   >
 
                 </div>
                 <div class="comentarios">
 
                 <input
-                  type="text"
-                  placeholder="Escribí un comentario..."
-                  id="comentario-${foto.id_foto}"
-                >
+                   type="text"
+                   placeholder="Escribí un comentario..."
+                   id="comentario-${foto.id_foto}"
+                 >
 
                 <button
                   onclick="comentar(${foto.id_foto})"
-                >
-                  Comentar
-                </button>
+                 >
+                   Comentar
+                 </button>
 
-                <div id="lista-comentarios-${foto.id_foto}">
-                </div>
+                 <div id="lista-comentarios-${foto.id_foto}">
+                 </div>
 
-              </div>
+               </div>
 
-              </div>
-            `;
-          });
-       fotos.forEach(foto => {
+               </div>
+         
+            
+          
+          `;
+        });
 
-         cargarComentarios(foto.id_foto);
+        fotos.forEach(foto => {
 
-      });
-        } catch (error) {
+          cargarComentarios(foto.id_foto);
 
-          console.error(error);
-        }
+        });
       }
+
+      async function cargarFotos() {
+
+          try {
+
+            const res = await fetch( "/api/fotos",
+              {
+                headers: {
+                  Authorization:
+                    "Bearer " + token
+                }
+              }
+            );
+
+            const fotos =
+              await res.json();
+
+            renderizarFotos(fotos);
+
+          } catch (error) {
+
+            console.error(error);
+          }
+        }
+
+      async function cargarFeedSeguidos() {
+
+          try {
+
+            const res = await fetch( "/api/fotos/feed",
+              {
+                headers: {
+                  Authorization:
+                    "Bearer " + token
+                }
+              }
+            );
+
+            const fotos =
+              await res.json();
+
+            renderizarFotos(fotos);
+
+          } catch (error) {
+
+            console.error(error);
+          }
+        }
+
+      async function cargarMisPosts() {
+
+          try {
+
+            const res = await fetch( "/api/fotos/mias",
+              {
+                headers: {
+                  Authorization:
+                    "Bearer " + token
+                }
+              }
+            );
+
+            const fotos =
+              await res.json();
+
+            renderizarFotos(fotos);
+
+          } catch (error) {
+
+            console.error(error);
+          }
+        }
 
       async function seguirUsuario(id) {
 
@@ -306,15 +389,11 @@ html
 
       async function cargarSeguidos() {
 
-        const lista =
-          document.getElementById(
-            "listaAmigos"
-          );
+        const lista = document.getElementById("listaAmigos");
 
         try {
 
-          const res = await fetch(
-            "/api/seguidores",
+          const res = await fetch( "/api/seguidores",
             {
 
               headers: {
@@ -356,12 +435,9 @@ html
       }
 
       async function comentar(id_foto) {
-
-          const input =
-            document.getElementById(
-              `comentario-${id_foto}`
-            );
-
+        
+          const input = document.getElementById( `comentario-${id_foto}` );
+          
           const contenido =
             input.value;
 
@@ -395,33 +471,24 @@ html
             const data =
               await res.json();
 
-            console.log(data);
+           
             cargarComentarios(id_foto);
             input.value = "";
 
           } catch (error) {
-
             console.error(error);
           }
         }
 
-      async function cargarComentarios(
-        id_foto
-      ) {
+      async function cargarComentarios(id_foto) {
 
-        const div =
-          document.getElementById(
-            `lista-comentarios-${id_foto}`
-          );
+        const div =document.getElementById(`lista-comentarios-${id_foto}` );
 
         try {
 
-          const res = await fetch(
-            `/api/comentarios/${id_foto}`
-          );
+          const res = await fetch( `/api/comentarios/${id_foto}`);
 
-          const comentarios =
-            await res.json();
+          const comentarios = await res.json();
 
           div.innerHTML = "";
 
@@ -441,12 +508,159 @@ html
             `;
           });
 
-        } catch (error) {
+          } catch (error) {
+          console.error(error);
+          }
+      }
 
+      async function abrirPost(id_foto) {
+        
+        const modal =document.getElementById( "modalPost");
+
+        const contenido =document.getElementById( "contenidoModal" );
+
+        const foto =
+          fotosGlobal.find(
+            f => f.id_foto == id_foto
+          );
+        
+        contenido.innerHTML = `
+
+          <div class="post-imagen">
+
+            <img
+              src="/uploads/${foto.url_imagen}"
+            >
+
+          </div>
+
+          <div class="modal-info">
+            <div class="card">
+              <div class="card-header">
+
+                  <div class="avatar"></div>
+
+                  <span class="username">
+                    ${foto.username}
+                  </span>
+
+                </div>
+        
+              <div class="card-body">
+                  <p>
+                    ${foto.descripcion}
+                  </p>
+              </div>
+            </div>
+
+            <div class="card">
+              <div
+                id="lista-comentario-${foto.id_foto}"
+              >
+            </div>
+            <input
+                  type="text"
+                  placeholder="Escribí un comentario..."
+                  id="comentarios-${foto.id_foto}"
+                >
+
+                <button
+                  onclick="comentarModal(${foto.id_foto})"
+                >
+                  Comentar
+                </button>
+          </div>
+              
+
+          </div>
+        `;
+
+        modal.style.display = "flex";
+        
+        cargarComentariosModal(id_foto);
+      }
+
+
+      function cerrarPost() {
+       document.getElementById("modalPost").style.display = "none";
+        cargarFotos()
+      }
+
+
+       async function cargarComentariosModal(id_foto) {
+          
+        const div = document.getElementById( `lista-comentario-${id_foto}`);
+        
+        try {
+
+          const res = await fetch( `/api/comentarios/${id_foto}`);
+          
+          const comentarios =await res.json();
+
+          div.innerHTML = "";
+
+          comentarios.forEach(c => {
+            
+            div.innerHTML += `
+
+              <div class="comentario">
+
+                <strong>${c.username}</strong>
+
+                ${c.contenido}
+
+              </div>
+            `;
+          });
+
+        } catch (error) {
           console.error(error);
         }
       }
 
+      async function comentarModal(id_foto) {
+        
+          const input =document.getElementById(`comentarios-${id_foto}` );
+          
+          const contenido = input.value;
+
+          if (!contenido.trim()) return;
+
+          try {
+
+            const res = await fetch( "/api/comentarios",
+              {
+
+                method: "POST",
+
+                headers: {
+
+                  "Content-Type":
+                    "application/json",
+
+                  Authorization:
+                    "Bearer " + token
+                },
+
+                body: JSON.stringify({
+                  id_foto,
+                  contenido
+                })
+              }
+            );
+
+            const data =
+              await res.json();
+
+            
+            cargarComentariosModal(id_foto);
+            input.value = "";
+
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      
       cargarSeguidos();
       cargarFotos();
       
