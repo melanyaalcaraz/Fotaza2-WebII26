@@ -34,6 +34,7 @@ html
         
         br
         div.publicar  
+          textarea( placeholder="Titulo" id="titulo")
           textarea( placeholder="Que estas pensando?" id="subir")
           
 
@@ -65,7 +66,7 @@ html
        
       div.amigos
 
-          h2 Amigos
+          h2 Siguiendo
 
           div#listaAmigos
                   
@@ -91,6 +92,7 @@ html
       const usuario = JSON.parse(localStorage.getItem("usuario"));
       const saludo = document.getElementById("saludo");
 
+      //saludar usuario
       if (usuario) {
         saludo.textContent = usuario.username.charAt(0).toUpperCase() + usuario.username.slice(1);
       }
@@ -101,8 +103,8 @@ html
       const mensaje = document.getElementById("mensajePublicacion");
       const busqueda = document.getElementById("busqueda");
       let fotosGlobal = [];
-
       const resultadosBusqueda = document.getElementById("resultadosBusqueda");
+
       //buscar usuarios
       busqueda.addEventListener("input", async () => {
 
@@ -133,10 +135,17 @@ html
                   ${usuario.username}
                 </span>
 
-                <button class="btn-seguir"
-                id="seguir-${usuario.id_usuario}"
-                 onclick="seguirUsuario(${usuario.id_usuario})">
-                  Seguir
+                <button
+
+                  class="btn-seguir"
+
+                  id="seguir-${usuario.id_usuario}"
+
+                  onclick="
+                    seguirUsuario(${usuario.id_usuario})
+                  "
+                > Seguir
+
                 </button>
 
               </div>
@@ -153,11 +162,12 @@ html
       btn.addEventListener("click", async () => {
 
         const archivo = document.getElementById("archivoImagen").files[0];
-        if (!archivo) {
+        const titulo =document.getElementById("titulo").value;
+        if (!archivo||!titulo) {
 
           mensaje.style.display = "block";
           mensaje.className = "mensaje-error";
-          mensaje.textContent = "Tenés que subir una imagen";
+          mensaje.textContent = "Tenés que subir una imagen y agregar un título";
 
           setTimeout(() => {
             mensaje.style.display = "none";
@@ -168,7 +178,7 @@ html
         const formData = new FormData();
 
         formData.append("imagen", archivo);
-
+        formData.append("titulo", titulo);
         formData.append("descripcion", textarea.value);
 
         try {
@@ -193,16 +203,20 @@ html
           mensaje.textContent = "Publicación subida correctamente";
           textarea.value = "";
           document.getElementById("archivoImagen").value = "";
+          document.getElementById("titulo").value = "";
 
           setTimeout(() => {
             mensaje.style.display = "none";
             mensaje.textContent = "";
           }, 3000);
-          cargarFotos();
+          cargarMisPosts();
+        
+
           } catch (error) {
 
             console.error(error);
           }
+         
       });
 
 
@@ -227,7 +241,11 @@ html
                  </div>
 
                  <div class="card-body">
+                    <h2 class="titulo-post">
 
+                       ${foto.titulo || ""}
+
+                    </h2>
                   
                    <p>
                      ${foto.descripcion}
@@ -241,6 +259,35 @@ html
                   >
 
                 </div>
+
+                <select
+                    id="valoracion-${foto.id_foto}"
+                  >
+
+                    <option value="1">1⭐</option>
+                    <option value="2">2⭐</option>
+                    <option value="3">3⭐</option>
+                    <option value="4">4⭐</option>
+                    <option value="5">5⭐</option>
+
+                  </select>
+
+                  <button
+                    id="btn-valorar-${foto.id_foto}"
+                    ${foto.disabled ? "disabled" : ""}
+                    onclick="
+                      valorarFoto(${foto.id_foto})
+                    "
+                  >
+                    Valorar
+                  </button>
+                  <p class="valoracion">
+
+                    ⭐ ${foto.promedio || 0}
+
+                    (${foto.votos} votos)
+
+                  </p>
                 <div class="comentarios">
 
                 <input
@@ -270,7 +317,7 @@ html
         fotos.forEach(foto => {
 
           cargarComentarios(foto.id_foto);
-
+          
         });
       }
 
@@ -322,11 +369,12 @@ html
           }
         }
 
-      async function cargarMisPosts() {
 
+      async function cargarMisPosts() {
           try {
 
-            const res = await fetch( "/api/fotos/mias",
+            const res = await fetch(
+              "/api/fotos/mias",
               {
                 headers: {
                   Authorization:
@@ -340,12 +388,24 @@ html
 
             renderizarFotos(fotos);
 
+            fotos.forEach(foto => {
+
+              const boton =
+                document.getElementById(
+                  `btn-valorar-${foto.id_foto}`
+                );
+                boton.textContent = "Es tu publicación";
+                boton.disabled = true;
+                
+              
+            });
+
           } catch (error) {
 
             console.error(error);
           }
         }
-
+        
       async function seguirUsuario(id) {
 
         try {
@@ -547,9 +607,12 @@ html
                 </div>
         
               <div class="card-body">
-                  <p>
-                    ${foto.descripcion}
-                  </p>
+                <h2 class="titulo-post">
+                  ${foto.titulo || ""}
+                </h2>
+                <p>
+                  ${foto.descripcion}
+                </p>
               </div>
             </div>
 
@@ -580,12 +643,10 @@ html
         cargarComentariosModal(id_foto);
       }
 
-
       function cerrarPost() {
        document.getElementById("modalPost").style.display = "none";
         cargarFotos()
       }
-
 
        async function cargarComentariosModal(id_foto) {
           
@@ -661,6 +722,62 @@ html
           }
         }
       
+
+      async function valorarFoto(id_foto) {
+
+        const select =
+          document.getElementById(
+            `valoracion-${id_foto}`
+          );
+
+        const puntuacion =
+          select.value;
+
+        try {
+
+          const res = await fetch(
+            "/api/valoraciones",
+            {
+
+              method: "POST",
+
+              headers: {
+
+                "Content-Type":
+                  "application/json",
+
+                Authorization:
+                  "Bearer " + token
+              },
+
+              body: JSON.stringify({
+
+                id_foto,
+                puntuacion
+              })
+            }
+          );
+
+          const data =
+            await res.json();
+
+          console.log(data);
+         
+          select.disabled = true;
+
+          const boton =document.getElementById(`btn-valorar-${id_foto}`);
+
+          boton.disabled = true;
+
+          boton.textContent ="Valorado";
+          
+          cargarFeedSeguidos()
+        } catch (error) {
+
+          console.error(error);
+        }
+        
+      }
       cargarSeguidos();
-      cargarFotos();
+      cargarMisPosts();
       

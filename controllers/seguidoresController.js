@@ -4,16 +4,41 @@ require("../models/seguidoresModel");
 function seguir(req, res) {
 
   const usuario_seguidor = req.usuario.id;
-  const { usuario_seguido } = req.body; seguidoresModel.seguirUsuario(usuario_seguidor,usuario_seguido, (error) => {
+  const { usuario_seguido } = req.body;
+   seguidoresModel.seguirUsuario(usuario_seguidor,usuario_seguido, (err) => {
+      
+    if (err) {
+    if (
+        err.code ===
+        "ER_DUP_ENTRY"
+      ) {
 
-      if (error) {
-         console.error(error);
-          return res.status(500).json({error: "Error al seguir usuario"});
+        return res.status(400)
+        .json({
+
+          mensaje:
+            "Ya seguís a este usuario"
+        });
       }
-      res.json({ mensaje: "Usuario seguido"});
+
+      console.error(err);
+
+      return res.status(500)
+      .json({
+
+        mensaje:
+          "Error al seguir usuario"
+      });
     }
-  );
-}
+
+    res.json({
+      mensaje:
+        "Usuario seguido"
+    });
+  }
+)};
+
+
 
 function obtenerSeguidos(req, res) {
 

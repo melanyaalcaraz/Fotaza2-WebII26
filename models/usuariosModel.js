@@ -24,18 +24,72 @@ const obtenerPorEmail = (email) => {
   });
 };
 
-function buscarUsuarios(texto, callback) {
+// function buscarUsuarios(texto, callback) {
+
+//   const sql = `
+//     SELECT id_usuario, username, foto_perfil
+//     FROM usuarios
+//     WHERE username LIKE ?
+//     LIMIT 10
+//   `;
+
+//   conexion.query( sql, [`%${texto}%`], callback);
+// }
+
+function buscarUsuarios(
+  id_usuario,
+  texto,
+  callback
+) {
 
   const sql = `
-    SELECT id_usuario, username, foto_perfil
+
+    SELECT
+
+      usuarios.id_usuario,
+
+      usuarios.username,
+
+      usuarios.foto_perfil,
+
+      CASE
+
+        WHEN seguidores.usuario_seguidor
+        IS NOT NULL
+
+        THEN 1
+
+        ELSE 0
+
+      END AS siguiendo
+
     FROM usuarios
-    WHERE username LIKE ?
+
+    LEFT JOIN seguidores
+
+    ON usuarios.id_usuario =
+    seguidores.usuario_seguido
+
+    AND seguidores.usuario_seguidor = ?
+
+    WHERE usuarios.username
+    LIKE ?
+
     LIMIT 10
   `;
 
-  conexion.query( sql, [`%${texto}%`], callback);
-}
+  conexion.query(
 
+    sql,
+
+    [
+      id_usuario,
+      `%${texto}%`
+    ],
+
+    callback
+  );
+}
 
 module.exports = {
   crearUsuario,

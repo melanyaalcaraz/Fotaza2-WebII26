@@ -88,19 +88,50 @@ const loginUsuario = async (req, res) => {
 };
 
 
-const buscarUsuarios = (req, res) => {
-  const { q } = req.query;
+// const buscarUsuarios = (req, res) => {
+//   const { q } = req.query;
   
 
-  usuariosModel.buscarUsuarios(q, (err, resultados) => {
-    if (err) {
-      console.error('Error al buscar usuarios:', err);
-      return res.status(500).json({ error: 'Error al buscar usuarios' });
-    }
+//   usuariosModel.buscarUsuarios(q, (err, resultados) => {
+//     if (err) {
+//       console.error('Error al buscar usuarios:', err);
+//       return res.status(500).json({ error: 'Error al buscar usuarios' });
+//     }
 
-    res.json(resultados);
-  });
-};
+//     res.json(resultados);
+//   });
+// };
+
+
+
+function buscarUsuarios(
+  req,
+  res
+) {
+
+  const texto =
+    req.query.q;
+
+  const id_usuario =
+    req.id_usuario;
+
+  usuariosModel.buscarUsuarios(id_usuario, texto,(err, resultados) => {
+
+      if (err) {
+
+        console.error(err);
+
+        return res.status(500).json({
+          error:
+            "Error al buscar usuarios"
+        });
+      }
+
+      res.json(resultados);
+    }
+  );
+}
+
 
 module.exports = {
   registrarUsuario,

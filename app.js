@@ -24,6 +24,14 @@ app.use('/api/usuarios', rutasUsuarios);
 const rutasFotos = require("./routes/fotos");
 app.use("/api/fotos", rutasFotos);
 
+const rutasComentarios = require("./routes/comentario");
+app.use( "/api/comentarios",rutasComentarios);
+
+const rutasSeguidores = require("./routes/seguidores");
+app.use( "/api/seguidores", rutasSeguidores);
+
+const valoracionesRoutes = require("./routes/valoraciones");
+app.use( "/api/valoraciones",valoracionesRoutes);
 
 
 
@@ -38,9 +46,7 @@ app.get("/login", (req, res) => {
   res.render("login", { query: req.query });
 }); 
 
-const rutasSeguidores = require("./routes/seguidores");
 
-app.use( "/api/seguidores", rutasSeguidores);
 
 
 
@@ -48,9 +54,7 @@ app.use(express.static('public'));
 
 app.use(express.urlencoded({ extended: true }));
 
-const rutasComentarios = require("./routes/comentario");
 
-app.use( "/api/comentarios",rutasComentarios);
 // iniciar servidor
 app.listen(puerto, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${puerto}`);
