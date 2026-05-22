@@ -36,7 +36,7 @@ html
         div.publicar  
           textarea( placeholder="Titulo" id="titulo")
           textarea( placeholder="Que estas pensando?" id="subir")
-          
+          input(id="tags" type="text" placeholder="Etiquetas separadas por comas")
 
           input(
               type="file"
@@ -163,6 +163,7 @@ html
 
         const archivo = document.getElementById("archivoImagen").files[0];
         const titulo =document.getElementById("titulo").value;
+        const tags = document.getElementById("tags").value
         if (!archivo||!titulo) {
 
           mensaje.style.display = "block";
@@ -180,7 +181,7 @@ html
         formData.append("imagen", archivo);
         formData.append("titulo", titulo);
         formData.append("descripcion", textarea.value);
-
+        formData.append("tags",tags);
         try {
 
           const res = await fetch("/api/fotos", {
@@ -204,6 +205,7 @@ html
           textarea.value = "";
           document.getElementById("archivoImagen").value = "";
           document.getElementById("titulo").value = "";
+          document.getElementById("tags").value = "";
 
           setTimeout(() => {
             mensaje.style.display = "none";
@@ -225,7 +227,7 @@ html
         fotosGlobal = fotos;
 
         feed.innerHTML = "";
-
+        
         fotos.forEach(foto => {
 
           feed.innerHTML += `
@@ -250,7 +252,12 @@ html
                    <p>
                      ${foto.descripcion}
                    </p>
-                  <img
+                   <p class="tags">
+
+                    ${foto.tags || ""}
+
+                  </p>
+                     <img
                     src="/uploads/${foto.url_imagen}"
                     class="foto-feed"
                     onclick="

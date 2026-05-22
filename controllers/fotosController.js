@@ -8,8 +8,9 @@ function subirFoto(req, res) {
     const titulo=req.body.titulo;
     const descripcion = req.body.descripcion;
     const url_imagen = req.file.filename;
+    const tags=req.body.tags;
 
-    fotosModel.guardarFoto(id_usuario,titulo,url_imagen,descripcion,(error, resultado) => {
+    fotosModel.guardarFoto(id_usuario,url_imagen, descripcion,titulo,tags, (error, resultado) => {
         if (error) {
           console.error("Errorazo al guardar imagen ", error);
           return res.status(500).json({
