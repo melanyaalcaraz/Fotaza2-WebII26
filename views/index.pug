@@ -127,9 +127,13 @@ html
 
         try {
 
+          //- const res = await fetch(
+          //-   `/api/usuarios/buscar?q=${encodeURIComponent(texto)}`,
+          //- );
           const res = await fetch(
-            `/api/usuarios/buscar?q=${encodeURIComponent(texto)}`,
-          );
+
+         `https://fotaza-backend.onrender.com/api/usuarios/buscar?q=${encodeURIComponent(texto)}`
+            );
 
           const usuarios = await res.json();
 
@@ -180,8 +184,8 @@ html
           
           const res = await fetch(
 
-            `/api/fotos/buscar?q=${encodeURIComponent(texto)}`,
-
+            //- `/api/fotos/buscar?q=${encodeURIComponent(texto)}`,
+            `https://fotaza-backend.onrender.com/api/fotos/buscar?q=${encodeURIComponent(texto)}`
             {
               headers: {
                 Authorization:
@@ -229,9 +233,12 @@ html
         formData.append("tags",tags);
         try {
 
-          const res = await fetch("/api/fotos", {
-
+          const res = await fetch(
+            //- "/api/fotos",
+            `https://fotaza-backend.onrender.com/api/fotos}`,
             method: "POST",
+            {
+           
 
             headers: {
               Authorization: "Bearer " + token
@@ -377,7 +384,9 @@ html
 
           try {
 
-            const res = await fetch( "/api/fotos",
+            const res = await fetch(
+              //-  "/api/fotos"
+            `https://fotaza-backend.onrender.com/api/fotos`,
               {
                 headers: {
                   Authorization:
@@ -401,7 +410,9 @@ html
 
           try {
 
-            const res = await fetch( "/api/fotos/feed",
+            const res = await fetch(
+              //-  "/api/fotos/feed"
+               `https://fotaza-backend.onrender.com/api/fotos/feed`,
               {
                 headers: {
                   Authorization:
@@ -426,7 +437,8 @@ html
           try {
 
             const res = await fetch(
-              "/api/fotos/mias",
+              //- "/api/fotos/mias",
+              `https://fotaza-backend.onrender.com/api/fotos/mias`,
               {
                 headers: {
                   Authorization:
@@ -462,7 +474,9 @@ html
 
         try {
 
-          const res = await fetch( "/api/seguidores", {
+          const res = await fetch( 
+            //- "/api/seguidores",
+            `https://fotaza-backend.onrender.com/api/seguidores`, {
 
               method: "POST",
 
@@ -505,7 +519,9 @@ html
 
         try {
 
-          const res = await fetch( "/api/seguidores",
+          const res = await fetch( 
+            //- "/api/seguidores",
+          `https://fotaza-backend.onrender.com/api/seguidores`,
             {
 
               headers: {
@@ -558,7 +574,8 @@ html
           try {
 
             const res = await fetch(
-              "/api/comentarios",
+              //- "/api/comentarios",
+              `https://fotaza-backend.onrender.com/api/comentarios`,
               {
 
                 method: "POST",
@@ -598,7 +615,10 @@ html
 
         try {
 
-          const res = await fetch( `/api/comentarios/${id_foto}`);
+          const res = await fetch( 
+            //- `/api/comentarios/${id_foto}`
+            `https://fotaza-backend.onrender.com/api/comentarios/${id_foto}`
+            );
 
           const comentarios = await res.json();
 
@@ -706,7 +726,10 @@ html
         
         try {
 
-          const res = await fetch( `/api/comentarios/${id_foto}`);
+          const res = await fetch(
+            //-  `/api/comentarios/${id_foto}`
+             `https://fotaza-backend.onrender.com/api/comentarios/${id_foto}`
+             );
           
           const comentarios =await res.json();
 
@@ -741,7 +764,10 @@ html
 
           try {
 
-            const res = await fetch( "/api/comentarios",
+            const res = await fetch(
+              //-  "/api/comentarios"
+               `https://fotaza-backend.onrender.com/api/comentarios`
+               ,
               {
 
                 method: "POST",
@@ -788,7 +814,8 @@ html
         try {
 
           const res = await fetch(
-            "/api/valoraciones",
+            //- "/api/valoraciones",
+            `https://fotaza-backend.onrender.com/api/valoraciones`,
             {
 
               method: "POST",

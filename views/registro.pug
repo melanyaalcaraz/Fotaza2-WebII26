@@ -43,7 +43,10 @@ html
         const password = document.getElementById("password").value;
 
         try {
-          const res = await fetch("/api/usuarios/registro", {
+          const res = await fetch(
+            //- "/api/usuarios/registro", 
+            `https://fotaza-backend.onrender.com/api/usuarios/registro` ,
+            {
             method: "POST",
             headers: {
               "Content-Type": "application/json"

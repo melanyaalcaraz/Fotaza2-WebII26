@@ -43,7 +43,11 @@ script.
     const password = document.getElementById('password').value;
 
     try {
-      const res = await fetch('/api/usuarios/login', {
+      const res = await fetch(
+        //- '/api/usuarios/login', 
+        `https://fotaza-backend.onrender.com/api/usuarios/login`,
+        
+        {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
