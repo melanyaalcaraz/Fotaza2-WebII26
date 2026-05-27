@@ -7,6 +7,7 @@ const registrarUsuario = async (req, res) => {
   try {
     const { nombre, email, password } = req.body;
     console.log("BODY estoy en registro:", req.body);
+    
 
     if (!nombre || !email || !password) {
       return res.status(400).json({ error: 'Todos los campos son obligatorios' });
@@ -30,7 +31,7 @@ const registrarUsuario = async (req, res) => {
     };
 
     await usuariosModel.crearUsuario(nuevoUsuario);
-
+    
 
     res.json({ mensaje: 'Usuario registrado correctamente' });
 
@@ -87,33 +88,11 @@ const loginUsuario = async (req, res) => {
   }
 };
 
+function buscarUsuarios(req, res) {
 
-// const buscarUsuarios = (req, res) => {
-//   const { q } = req.query;
-  
+  const texto =req.query.q;
 
-//   usuariosModel.buscarUsuarios(q, (err, resultados) => {
-//     if (err) {
-//       console.error('Error al buscar usuarios:', err);
-//       return res.status(500).json({ error: 'Error al buscar usuarios' });
-//     }
-
-//     res.json(resultados);
-//   });
-// };
-
-
-
-function buscarUsuarios(
-  req,
-  res
-) {
-
-  const texto =
-    req.query.q;
-
-  const id_usuario =
-    req.id_usuario;
+  const id_usuario =req.id_usuario;
 
   usuariosModel.buscarUsuarios(id_usuario, texto,(err, resultados) => {
 

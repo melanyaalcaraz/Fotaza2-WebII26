@@ -75,9 +75,29 @@ const obtenerFeedSeguidos = (req,res) => {
   );
 };
 
+function buscarFotos(req, res) {
+
+  const texto = req.query.q;
+  
+  fotosModel.buscarFotos(texto,(error, resultados) => {
+
+      if (error) {
+
+        console.error(error);
+        return res.status(500).json({
+          error:
+          "Error al buscar fotos"
+        });
+      }
+      res.json(resultados);
+    }
+  );
+}
+
 module.exports = {
   subirFoto,
   obtenerFotosUsuario,
   obtenerMisFotos,
-  obtenerFeedSeguidos
+  obtenerFeedSeguidos,
+  buscarFotos
 };

@@ -104,8 +104,9 @@ html
       const busqueda = document.getElementById("busqueda");
       let fotosGlobal = [];
       const resultadosBusqueda = document.getElementById("resultadosBusqueda");
-
+      
       //buscar usuarios
+      
       busqueda.addEventListener("input", async () => {
 
         const texto = busqueda.value;
@@ -113,13 +114,21 @@ html
         if (texto.length < 2) {
 
           resultadosBusqueda.innerHTML = "";
+          
+          return;
+        }
+
+        if (texto.startsWith("#")) {
+          
+          buscarPosts(texto);
+
           return;
         }
 
         try {
 
           const res = await fetch(
-            `/api/usuarios/buscar?q=${texto}`
+            `/api/usuarios/buscar?q=${encodeURIComponent(texto)}`,
           );
 
           const usuarios = await res.json();
@@ -127,12 +136,15 @@ html
           resultadosBusqueda.innerHTML = "";
 
           usuarios.forEach(usuario => {
-
+           
             resultadosBusqueda.innerHTML += `
+
               <div class="usuario-resultado">
 
                 <span>
+
                   ${usuario.username}
+
                 </span>
 
                 <button
@@ -144,7 +156,9 @@ html
                   onclick="
                     seguirUsuario(${usuario.id_usuario})
                   "
-                > Seguir
+                >
+
+                  Seguir
 
                 </button>
 
@@ -152,11 +166,42 @@ html
             `;
           });
 
+          buscarPosts(texto);
+
         } catch (error) {
 
           console.error(error);
         }
       });
+
+      async function buscarPosts(texto) {
+          
+        try {
+          
+          const res = await fetch(
+
+            `/api/fotos/buscar?q=${encodeURIComponent(texto)}`,
+
+            {
+              headers: {
+                Authorization:
+                  "Bearer " + token
+              }
+            }
+          );
+
+          const fotos =
+            await res.json();
+
+          renderizarFotos(fotos);
+
+        } catch (error) {
+
+          console.error(error);
+        }
+      }
+
+
 
       //publicar
       btn.addEventListener("click", async () => {

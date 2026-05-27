@@ -13,7 +13,7 @@ function guardarFoto(id_usuario,url_imagen,descripcion,titulo,tags,callback) {
       }
 
       const id_foto =resultado.insertId;
-      const listaTags =tags.split(" ");
+      const listaTags =tags.split(/[ ,]+/);
 
       listaTags.forEach(tag => {
 
@@ -187,9 +187,133 @@ const obtenerFeedSeguidos = (id_usuario, callback) => {
   conexion.query( sql, [id_usuario], callback);
 };
 
+
+function buscarFotos( texto,callback) {
+  
+  let sql = "";
+  let valores = [];
+  
+  if (texto.startsWith("#")) {
+    texto =texto.replace("#", "");
+
+    sql = `
+
+      SELECT
+
+        fotos.id_foto,
+        fotos.id_usuario,
+        fotos.url_imagen,
+        fotos.descripcion,
+        fotos.titulo,
+        fotos.fecha_publicacion,
+        usuarios.username,
+
+        ROUND(
+          AVG(valoraciones.puntuacion),
+          1
+        ) AS promedio,
+
+        COUNT(
+          DISTINCT valoraciones.id_valoracion
+        ) AS votos,
+
+        GROUP_CONCAT(
+          DISTINCT etiquetas.nombre
+          SEPARATOR ' '
+
+        ) AS tags
+
+      FROM fotos
+
+      JOIN usuarios
+      ON fotos.id_usuario =
+      usuarios.id_usuario
+
+      LEFT JOIN valoraciones
+      ON fotos.id_foto =
+      valoraciones.id_foto
+
+      JOIN foto_etiqueta
+      ON fotos.id_foto =
+      foto_etiqueta.id_foto
+
+      JOIN etiquetas
+      ON foto_etiqueta.id_etiqueta =
+      etiquetas.id_etiqueta
+
+      WHERE etiquetas.nombre LIKE ?
+
+      GROUP BY fotos.id_foto
+
+      ORDER BY fecha_publicacion DESC
+    `;
+
+    valores = [`%${texto}%`];
+
+  } else {
+
+    sql = `
+
+      SELECT
+
+        fotos.id_foto,
+        fotos.id_usuario,
+        fotos.url_imagen,
+        fotos.descripcion,
+        fotos.titulo,
+        fotos.fecha_publicacion,
+        usuarios.username,
+
+        ROUND(
+          AVG(valoraciones.puntuacion),
+          1
+        ) AS promedio,
+
+        COUNT(
+          DISTINCT valoraciones.id_valoracion
+        ) AS votos,
+
+        GROUP_CONCAT(
+          DISTINCT etiquetas.nombre
+          SEPARATOR ' '
+
+        ) AS tags
+
+      FROM fotos
+
+      JOIN usuarios
+      ON fotos.id_usuario =
+      usuarios.id_usuario
+
+      LEFT JOIN valoraciones
+      ON fotos.id_foto =
+      valoraciones.id_foto
+
+      LEFT JOIN foto_etiqueta
+      ON fotos.id_foto =
+      foto_etiqueta.id_foto
+
+      LEFT JOIN etiquetas
+      ON foto_etiqueta.id_etiqueta =
+      etiquetas.id_etiqueta
+
+      WHERE fotos.titulo LIKE ?
+
+      GROUP BY fotos.id_foto
+
+      ORDER BY fecha_publicacion DESC
+    `;
+
+    valores = [`%${texto}%`];
+  }
+
+  conexion.query(sql,valores,callback);
+}
+
 module.exports = {
     guardarFoto,
     obtenerPorUsuario,
     obtenerMisFotos,
-    obtenerFeedSeguidos
+    obtenerFeedSeguidos,
+    buscarFotos
 };

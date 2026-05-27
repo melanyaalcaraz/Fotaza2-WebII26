@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-
+require("dotenv").config();
 const app = express();
 
 app.use(cors());
@@ -15,7 +15,7 @@ app.set('views', path.join(__dirname, 'views'));
 // archivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
-const puerto = 3000;
+const puerto = process.env.PORT || 3000;
 
 // Importar rutas
 const rutasUsuarios = require('./routes/usuarios');
@@ -33,6 +33,7 @@ app.use( "/api/seguidores", rutasSeguidores);
 const valoracionesRoutes = require("./routes/valoraciones");
 app.use( "/api/valoraciones",valoracionesRoutes);
 
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 
 // ruta principal (vista)
@@ -48,11 +49,6 @@ app.get("/login", (req, res) => {
 
 
 
-
-
-app.use(express.static('public'));
-
-app.use(express.urlencoded({ extended: true }));
 
 
 // iniciar servidor

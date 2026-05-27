@@ -5,6 +5,7 @@ const crearUsuario = (data) => {
     const sql = 'INSERT INTO usuarios SET ?';
 
     conexion.query(sql, data, (err, resultado) => {
+      
       if (err) return reject(err);
       resolve(resultado);
     });
