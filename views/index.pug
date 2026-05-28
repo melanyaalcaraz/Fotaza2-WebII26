@@ -86,7 +86,7 @@ html
       const token = localStorage.getItem('token');
       if (!token) {
         alert('Debes iniciar sesión');
-        window.location.href = 'login.html';
+        window.location.href = '/login';
       }
       
       const usuario = JSON.parse(localStorage.getItem("usuario"));
@@ -185,7 +185,7 @@ html
           const res = await fetch(
 
             //- `/api/fotos/buscar?q=${encodeURIComponent(texto)}`,
-            `https://fotaza-backend.onrender.com/api/fotos/buscar?q=${encodeURIComponent(texto)}`
+            `https://fotaza-backend.onrender.com/api/fotos/buscar?q=${encodeURIComponent(texto)}`,
             {
               headers: {
                 Authorization:
@@ -235,11 +235,9 @@ html
 
           const res = await fetch(
             //- "/api/fotos",
-            `https://fotaza-backend.onrender.com/api/fotos}`,
-            method: "POST",
+            `https://fotaza-backend.onrender.com/api/fotos`,
             {
-           
-
+            method: "POST",
             headers: {
               Authorization: "Bearer " + token
             },
@@ -310,7 +308,7 @@ html
 
                   </p>
                      <img
-                    src="/uploads/${foto.url_imagen}"
+                    src="https://fotaza-backend.onrender.com/uploads/${foto.url_imagen}"
                     class="foto-feed"
                     onclick="
                         abrirPost(${foto.id_foto})
@@ -617,7 +615,7 @@ html
 
           const res = await fetch( 
             //- `/api/comentarios/${id_foto}`
-            `https://fotaza-backend.onrender.com/api/comentarios/${id_foto}`
+            `https://fotaza-backend.onrender.com/api/comentarios/${id_foto}`,
             );
 
           const comentarios = await res.json();
@@ -661,7 +659,7 @@ html
           <div class="post-imagen">
 
             <img
-              src="/uploads/${foto.url_imagen}"
+             src="https://fotaza-backend.onrender.com/uploads/${foto.url_imagen}"
             >
 
           </div>
