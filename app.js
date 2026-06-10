@@ -37,11 +37,11 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 
 // ruta principal (vista)
-// app.get('/', (req, res) => {res.render('index');});
+app.get('/', (req, res) => {res.render('index');});
 
-app.get('/', (req, res) => {
-  res.redirect('/registro');
-});
+// app.get('/', (req, res) => {
+//   res.redirect('/registro');
+// });
 
 app.get("/registro", (req, res) => {
   res.render("registro", { query: req.query });

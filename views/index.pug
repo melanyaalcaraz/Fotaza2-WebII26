@@ -84,9 +84,12 @@ html
     script.
       //token
       const token = localStorage.getItem('token');
+      console.log("TOKEN:", token);
       if (!token) {
         alert('Debes iniciar sesión');
         window.location.href = '/login';
+      }else {
+        console.log("TOKEN OK");
       }
       
       const usuario = JSON.parse(localStorage.getItem("usuario"));
