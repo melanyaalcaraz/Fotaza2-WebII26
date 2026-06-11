@@ -93,9 +93,9 @@ JWT_SECRET=tu_clave_jwt
 ## 5. Restaurar la base de datos
 
 Importar el archivo:
-
+con nombre fotaza2.sql y commit base correcta!!
 ```txt
-fotaza.sql
+fotaza2.sql
 ```
 
 en MySQL.
