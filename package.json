@@ -4,7 +4,8 @@
   "description": "Integrador Programacion Web II 2026",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "db:init": "node db-init.js"
   },
   "repository": {
     "type": "git",
