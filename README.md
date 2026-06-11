@@ -8,6 +8,13 @@ Fotaza es una aplicación web para compartir fotografías entre usuarios.
 
 La plataforma permite registrarse, iniciar sesión, publicar imágenes, comentar publicaciones, valorar fotografías, seguir usuarios y buscar contenido por título o etiquetas.
 
+
+## Links:
+- Link Video: https://docs.google.com/videos/d/13bnEl3JjgxoU0Zj0jbJLK50MWQlUDD_vOr4oowP28so/edit?usp=sharing
+- Link Repo: https://github.com/melanyaalcaraz/Fotaza2-WebII26
+- Link Render: https://fotaza-backend.onrender.com
+
+
 ## Funcionalidades
 
 - Registro de usuarios
@@ -86,9 +93,9 @@ JWT_SECRET=tu_clave_jwt
 ## 5. Restaurar la base de datos
 
 Importar el archivo:
-
+con nombre fotaza2.sql y commit base correcta!!
 ```txt
-fotaza.sql
+fotaza2.sql
 ```
 
 en MySQL.
